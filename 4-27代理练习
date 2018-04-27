@@ -1,0 +1,70 @@
+import requests
+import random
+from lxml import etree
+
+class IPProxyPool:
+    def __init__(self):
+        self.ip_list = []
+        self.proxy_list = {}
+        self.n = 0
+        self.user_agent_list = [
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
+            "Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6",
+            "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6",
+            "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1",
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5",
+            "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5",
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3",
+            "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.0 Safari/536.3",
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24",
+            "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24"
+        ]
+    def get_ip_list(self, proxy_url = 'http://www.xicidaili.com/nn/200'):
+        user_agent = random.choice(self.user_agent_list)
+        headers = {'User-Agent': user_agent}
+        ht = requests.get(proxy_url,headers=headers)
+        htm = etree.HTML(ht.text)
+        html = htm.xpath('//tr[position()>1]')   #抓取除了第一个之外的节点
+        print(len(html), "\n")
+        for htmldata in html:
+            ip = htmldata.xpath('./td[2]/text()')[0]
+            port = htmldata.xpath('./td[3]/text()')[0]
+            HttpType = htmldata.xpath('./td[6]/text()')[0]
+            # print(ip,':',port,':',HttpType)
+            self.ip_list.append(HttpType+':'+'http://'+ip+':'+port)
+        #print(self.ip_list, len(self.ip_list))
+        for ip in self.ip_list:
+            p_split = ip.split(":",1)
+            # print(p_split[0])
+            # print(p_split[1])
+            print(p_split[0],p_split[1])
+            self.proxy_list = {}#这里记得清空，不然由于字典的键不能重复，会导致代理重复使用
+            self.proxy_list[p_split[0]] = p_split[1]
+            self.check_ip(self.proxy_list)
+        print(self.n)
+    def check_ip(self, ip):
+        test_url = 'https://movie.douban.com/'
+        # print(self.proxy_list)
+        # print(ip)
+        proxy = ip
+        user_agent = random.choice(self.user_agent_list)
+        headers = {'User-Agent': user_agent}
+        response = requests.get(test_url, headers=headers, proxies=proxy, timeout=2)
+        response.encoding='utf-8'
+        print(response.text)
+        # if response.status_code == 200:
+        #     print('ok:',ip)
+        #     self.n = self.n+1
+        # else:
+        #     print('fail:', ip)
+        #     self.n = self.n - 1
+IPProxyPool = IPProxyPool()
+IPProxyPool.get_ip_list()
