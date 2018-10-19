@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://www.cnblogs.com/nzyjlr/p/8565201.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+<title>PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园</title>
+<meta property="og:description" content="PyCharm开源社区版不像商业版那样可以直接通过Django来创建项目，必须通过以下几个步骤进行： 1. 创建项目：在cmd命令行下输入：django-admin startproject Demo">
+<link type="text/css" rel="stylesheet" href="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/bundle-SimpleMemory.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/bundle-SimpleMemory-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/nzyjlr/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/nzyjlr/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/nzyjlr/wlwmanifest.xml">
+<script async="" src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/analytics.js.下载"></script><script src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/jquery-2.2.0.min.js.下载"></script><style type="text/css" adt="123"></style>
+<script type="text/javascript">var currentBlogApp = 'nzyjlr', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="preload" href="https://adservice.google.com/adsid/integrator.js?domain=www.cnblogs.com" as="script"><script type="text/javascript" src="https://adservice.google.com/adsid/integrator.js?domain=www.cnblogs.com"></script><script src="https://securepubads.g.doubleclick.net/gpt/pubads_impl_263.js" async=""></script><script>//console.log('a')
+</script><script>//remove 17173 video ad
+doAdblock();
+function doAdblock(){
+    (function() {
+        function A() {}
+        A.prototype = {
+            rules: {
+                '17173_in':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFile(Customer)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_in_20150522.swf"
+                },
+                '17173_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFileFirstpage\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_out_20150522.swf"
+                },
+                '17173_live':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream(_firstpage)?\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173_stream_20150522.swf"
+                },
+                '17173_live_out':{
+                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream_(custom)?Out\.swf/,
+                    'replace':"http://swf.adtchrome.com/17173.out.Live.swf"
+                }
+            },
+            _done: null,
+            get done() {
+                if(!this._done) {
+                    this._done = new Array();
+                }
+                return this._done;
+            },
+            addAnimations: function() {
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                style.innerHTML = 'object,embed{\
+                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;\
+                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;\
+                -o-animation-duration:.001s;-o-animation-name:playerInserted;\
+                animation-duration:.001s;animation-name:playerInserted;}\
+                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}';
+                document.getElementsByTagName('head')[0].appendChild(style);
+            },
+            animationsHandler: function(e) {
+                if(e.animationName === 'playerInserted') {
+                    this.replace(e.target);
+                }
+            },
+            replace: function(elem) {
+                if(this.done.indexOf(elem) != -1) return;
+                this.done.push(elem);
+                var player = elem.data || elem.src;
+                if(!player) return;
+                var i, find, replace = false;
+                for(i in this.rules) {
+                    find = this.rules[i]['find'];
+                    if(find.test(player)) {
+                        replace = this.rules[i]['replace'];
+                        if('function' === typeof this.rules[i]['preHandle']) {
+                            this.rules[i]['preHandle'].bind(this, elem, find, replace, player)();
+                        }else{
+                            this.reallyReplace.bind(this, elem, find, replace)();
+                        }
+                        break;
+                    }
+                }
+            },
+            reallyReplace: function(elem, find, replace) {
+                elem.data && (elem.data = elem.data.replace(find, replace)) || elem.src && ((elem.src = elem.src.replace(find, replace)) && (elem.style.display = 'block'));
+                var b = elem.querySelector("param[name='movie']");
+                this.reloadPlugin(elem);
+            },
+            reloadPlugin: function(elem) {
+                var nextSibling = elem.nextSibling;
+                var parentNode = elem.parentNode;
+                parentNode.removeChild(elem);
+                var newElem = elem.cloneNode(true);
+                this.done.push(newElem);
+                if(nextSibling) {
+                    parentNode.insertBefore(newElem, nextSibling);
+                } else {
+                    parentNode.appendChild(newElem);
+                }
+            },
+            init: function() {
+                var handler = this.animationsHandler.bind(this);
+                document.body.addEventListener('webkitAnimationStart', handler, false);
+                document.body.addEventListener('msAnimationStart', handler, false);
+                document.body.addEventListener('oAnimationStart', handler, false);
+                document.body.addEventListener('animationstart', handler, false);
+                this.addAnimations();
+            }
+        };
+        new A().init();
+    })();
+}
+//remove baidu search ad
+if(document.URL.indexOf('www.baidu.com') >= 0){
+    if(document && document.getElementsByTagName && document.getElementById && document.body){
+        var aa = function(){
+            var all = document.body.querySelectorAll("#content_left div,#content_left table");
+            for(var i = 0; i < all.length; i++){
+                if(/display:\s?(table|block)\s!important/.test(all[i].getAttribute("style"))){all[i].style.display= "none";all[i].style.visibility='hidden';}
+            }
+            all = document.body.querySelectorAll('.result.c-container[id="1"]');
+            //if(all.length == 1) return;
+            for(var i = 0; i < all.length; i++){
+                if(all[i].innerHTML && all[i].innerHTML.indexOf('广告')>-1){
+                    all[i].style.display= "none";all[i].style.visibility='hidden';
+                }
+            }
+        }
+        aa();
+        document.getElementById('wrapper_wrapper').addEventListener('DOMSubtreeModified',aa)
+    };
+}
+//remove sohu video ad
+if (document.URL.indexOf("tv.sohu.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+//remove 56.com video ad
+if (document.URL.indexOf("56.com") >= 0){
+    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+}
+//fore iqiyi enable html5 player function
+if (document.URL.indexOf("iqiyi.com") >= 0){
+    if (document.cookie.indexOf("player_forcedType=h5_VOD")==-1){
+        document.cookie='player_forcedType=h5_VOD'
+        if(localStorage.reloadTime && Date.now() - parseInt(localStorage.reloadTime)<60000){
+            console.log('no reload')
+        }else{
+            location.reload()
+            localStorage.reloadTime = Date.now();
+        }
+    }
+}
+</script><style type="text/css">object,embed{                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;                -o-animation-duration:.001s;-o-animation-name:playerInserted;                animation-duration:.001s;animation-name:playerInserted;}                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}</style></head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/nzyjlr/"><img id="blogLogo" src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/nzyjlr/">职场人的思考</a></h1>
+<h2>http://blog.sina.com.cn/u/1670354163</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li>
+<!----></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 236&nbsp; </span>
+<span id="stats_article_count">文章 - 8&nbsp; </span>
+<span id="stats-comment_count">评论 - 40</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/nzyjlr/p/8565201.html">PyCharm社区版+Django搭建web开发环境-1</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>&nbsp; &nbsp;PyCharm开源社区版不像商业版那样可以直接通过Django来创建项目，必须通过以下几个步骤进行：</p>
+<p>1. 创建项目：在cmd命令行下输入：django-admin startproject Demo&nbsp; &nbsp; &nbsp; &nbsp; （cmd命令先进入目录：cd D:\PycharmProjects）</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/164992-20180314095412502-1776051536.png" alt=""></p>
+<p>&nbsp;</p>
+<p>2. 导入项目：打开Pycharm，open，选择刚才创建的项目</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/164992-20180314095351480-1685476020.png" alt=""></p>
+<p>&nbsp;</p>
+<p>3. 创建应用：在cmd命令行下输入：python manage.py startapp web&nbsp; &nbsp; &nbsp; （cmd命令下先进入Demo所在的目录）</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/164992-20180314095314691-748463182.png" alt=""></p>
+<p>&nbsp;</p>
+<p>4. 查看目录：</p>
+<p>&nbsp;　　　　<img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/164992-20180314095247940-332490695.png" alt=""></p>
+<p>&nbsp;</p>
+<p>5. 启动服务：在cmd命令行下输入：python manage.py runserver&nbsp; &nbsp; &nbsp;（cmd命令下先进入Demo所在的目录）</p>
+<p>6. 服务运行起来之后，可以在浏览器输入默认的访问地址127.0.0.1:8000</p>
+<p>　　&nbsp; &nbsp;&nbsp;<img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/164992-20180314095453718-1198589055.png" alt=""></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>备注：常见问题：</p>
+<p>1. 命令行下提示：django-admin startproject Demo&nbsp; 不是内部命令或外部命令。</p>
+<p>&nbsp; &nbsp; &nbsp;<img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/164992-20180314095703698-1825782564.png" alt=""></p>
+<p>&nbsp; &nbsp; &nbsp;解决办法：检查系统变量-path 中是否加入3个正确的环境变量：</p>
+<p><span style="color: #0000ff;">&nbsp; &nbsp; &nbsp; Python相关：D:\Python27；D:\Python27\Scripts</span></p>
+<p><span style="color: #0000ff;">&nbsp; &nbsp; &nbsp; Django相关：D:\Python27\Lib\site-packages\Django-1.11.11-py2.7.egg\django\bin</span></p>
+<p>&nbsp; &nbsp; &nbsp; <img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/164992-20180314100025704-643927286.png" alt=""></p>
+<p>&nbsp;</p>
+<p>&nbsp; 2. pycharm 中如何调试django项目</p>
+<p>&nbsp; &nbsp; &nbsp; 工具菜单【run】-【Edit configurations】</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/164992-20180314112912803-472797683.png" alt=""></p>
+<p>&nbsp;</p></div><div id="MySignature" style="display: block;">不断的总结，才能不断的提高；不断的思考，才能不断的进步！</div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/nzyjlr/category/743715.html" target="_blank">Django</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(8565201,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;77399872-b2d5-df11-ac81-842b2b196315&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/nzyjlr/" target="_blank"><img src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/u164992.jpg" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/nzyjlr/">职场人的思考</a><br>
+            <a href="http://home.cnblogs.com/u/nzyjlr/followees">关注 - 4</a><br>
+            <a href="http://home.cnblogs.com/u/nzyjlr/followers">粉丝 - 130</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;77399872-b2d5-df11-ac81-842b2b196315&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(8565201,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(8565201,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/nzyjlr/p/8556189.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/nzyjlr/p/8556189.html" title="发布于2018-03-13 13:42">安全测试--检查点</a><br><a href="https://www.cnblogs.com/nzyjlr/p/8603593.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/nzyjlr/p/8603593.html" title="发布于2018-03-19 17:42">PyCharm社区版+Django搭建web开发环境-2</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2018-03-14 10:04</span> <a href="https://www.cnblogs.com/nzyjlr/">职场人的思考</a> 阅读(<span id="post_view_count">1345</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=8565201" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/nzyjlr/p/8565201.html#" onclick="AddToWz(8565201);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=76968,cb_entryId=8565201,cb_blogApp=currentBlogApp,cb_blogUserGuid='77399872-b2d5-df11-ac81-842b2b196315',cb_entryCreatedDate='2018/3/14 10:04:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/nzyjlr/p/8565201.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/nzyjlr/p/8565201.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/609100/" target="_blank">日本诺贝尔奖现在多于中国很正常，但未来属于中国</a><br> ·  <a href="https://news.cnblogs.com/n/609099/" target="_blank">出租屋里的年轻人</a><br> ·  <a href="https://news.cnblogs.com/n/609098/" target="_blank">外卖天天满25减21，商家们都是怎么挣钱的？</a><br> ·  <a href="https://news.cnblogs.com/n/609097/" target="_blank">百度云BaaS打造云端一站式区块链赋能中心 金融、物流等行业均受益</a><br> ·  <a href="https://news.cnblogs.com/n/609096/" target="_blank">法拉第未来仍身陷困境困境 传供应商已数周没有收到付款</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<script async="async" src="./PyCharm社区版+Django搭建web开发环境-1 - 职场人的思考 - 博客园_files/gpt.js.下载"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+<script>
+  googletag.cmd.push(function() {
+    googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;">
+    <script>
+    googletag.cmd.push(function() { googletag.display('div-gpt-ad-1539008685004-0'); });
+    </script>
+    </div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="https://kb.cnblogs.com/page/606682/" target="_blank">为什么说 Java 程序员必须掌握 Spring Boot ？</a><br> ·  <a href="https://kb.cnblogs.com/page/606645/" target="_blank">在学习中，有一个比掌握知识更重要的能力</a><br> ·  <a href="https://kb.cnblogs.com/page/603663/" target="_blank">如何招到一个靠谱的程序员</a><br> ·  <a href="https://kb.cnblogs.com/page/573614/" target="_blank">一个故事看懂“区块链”</a><br> ·  <a href="https://kb.cnblogs.com/page/603697/" target="_blank">被踢出去的用户</a><br></div>» <a href="https://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/nzyjlr/">职场人的思考</a><br>园龄：<a href="https://home.cnblogs.com/u/nzyjlr/" title="入园时间：2010-10-12">7年11个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/nzyjlr/followers/">130</a><br>关注：<a href="https://home.cnblogs.com/u/nzyjlr/followees/">4</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;77399872-b2d5-df11-ac81-842b2b196315&#39;)">+加关注</a></div><script>getFollowStatus('77399872-b2d5-df11-ac81-842b2b196315')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block"></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/nzyjlr/category/614946.html">Android(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/nzyjlr/category/658025.html">Appium(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/nzyjlr/category/743715.html">Django(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/nzyjlr/category/1248687.html">Fiddler(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/nzyjlr/category/777323.html">Jenkins(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/nzyjlr/category/840626.html">Jmeter(19)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/nzyjlr/category/1108191.html">Linux(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/nzyjlr/category/777377.html">Loadrunner(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/nzyjlr/category/639570.html">Python(44)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/nzyjlr/category/1252608.html">Redis(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/nzyjlr/category/774321.html">RobotFramework(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/nzyjlr/category/657905.html">Selenium(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/nzyjlr/category/767730.html">SQL(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/nzyjlr/category/839251.html">TCP(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/nzyjlr/category/324906.html">安全测试(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="https://www.cnblogs.com/nzyjlr/category/275262.html">操盘经验(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="https://www.cnblogs.com/nzyjlr/category/282142.html">操盘秘籍(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="https://www.cnblogs.com/nzyjlr/category/273227.html">测试工具(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="https://www.cnblogs.com/nzyjlr/category/271548.html">测试管理(17)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="https://www.cnblogs.com/nzyjlr/category/843171.html">测试培训(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="https://www.cnblogs.com/nzyjlr/category/842523.html">接口自动化(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_21" href="https://www.cnblogs.com/nzyjlr/category/271554.html">开发技能(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_22" href="https://www.cnblogs.com/nzyjlr/category/289212.html">名人观点(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_23" href="https://www.cnblogs.com/nzyjlr/category/1251054.html">软件测评师(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_24" href="https://www.cnblogs.com/nzyjlr/category/271557.html">生活有感(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_25" href="https://www.cnblogs.com/nzyjlr/category/271556.html">项目总结(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_26" href="https://www.cnblogs.com/nzyjlr/category/358813.html">性能测试(14)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_27" href="https://www.cnblogs.com/nzyjlr/category/271546.html">英语学习(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_28" href="https://www.cnblogs.com/nzyjlr/category/324907.html">用例设计(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_29" href="https://www.cnblogs.com/nzyjlr/category/271547.html">证券知识(13)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_30" href="https://www.cnblogs.com/nzyjlr/category/271550.html">职业发展(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_31" href="https://www.cnblogs.com/nzyjlr/category/271551.html">职业经理人(1)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/nzyjlr/archive/2018/09.html">2018年9月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/nzyjlr/archive/2018/07.html">2018年7月 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/nzyjlr/archive/2018/06.html">2018年6月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/nzyjlr/archive/2018/05.html">2018年5月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/nzyjlr/archive/2018/04.html">2018年4月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/nzyjlr/archive/2018/03.html">2018年3月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/nzyjlr/archive/2018/02.html">2018年2月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/nzyjlr/archive/2017/12.html">2017年12月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/nzyjlr/archive/2017/11.html">2017年11月 (14)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/nzyjlr/archive/2017/10.html">2017年10月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/nzyjlr/archive/2017/09.html">2017年9月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/nzyjlr/archive/2017/05.html">2017年5月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/nzyjlr/archive/2017/03.html">2017年3月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/nzyjlr/archive/2017/02.html">2017年2月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="https://www.cnblogs.com/nzyjlr/archive/2016/12.html">2016年12月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="https://www.cnblogs.com/nzyjlr/archive/2016/08.html">2016年8月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="https://www.cnblogs.com/nzyjlr/archive/2016/07.html">2016年7月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="https://www.cnblogs.com/nzyjlr/archive/2016/06.html">2016年6月 (21)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="https://www.cnblogs.com/nzyjlr/archive/2016/05.html">2016年5月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_19" href="https://www.cnblogs.com/nzyjlr/archive/2016/01.html">2016年1月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_20" href="https://www.cnblogs.com/nzyjlr/archive/2015/12.html">2015年12月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_21" href="https://www.cnblogs.com/nzyjlr/archive/2015/11.html">2015年11月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_22" href="https://www.cnblogs.com/nzyjlr/archive/2015/10.html">2015年10月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_23" href="https://www.cnblogs.com/nzyjlr/archive/2015/09.html">2015年9月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_24" href="https://www.cnblogs.com/nzyjlr/archive/2015/08.html">2015年8月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_25" href="https://www.cnblogs.com/nzyjlr/archive/2015/06.html">2015年6月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_26" href="https://www.cnblogs.com/nzyjlr/archive/2015/05.html">2015年5月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_27" href="https://www.cnblogs.com/nzyjlr/archive/2015/04.html">2015年4月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_28" href="https://www.cnblogs.com/nzyjlr/archive/2015/03.html">2015年3月 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_29" href="https://www.cnblogs.com/nzyjlr/archive/2015/02.html">2015年2月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_30" href="https://www.cnblogs.com/nzyjlr/archive/2015/01.html">2015年1月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_31" href="https://www.cnblogs.com/nzyjlr/archive/2014/12.html">2014年12月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_32" href="https://www.cnblogs.com/nzyjlr/archive/2014/11.html">2014年11月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_33" href="https://www.cnblogs.com/nzyjlr/archive/2014/09.html">2014年9月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_34" href="https://www.cnblogs.com/nzyjlr/archive/2012/02.html">2012年2月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_35" href="https://www.cnblogs.com/nzyjlr/archive/2011/12.html">2011年12月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_36" href="https://www.cnblogs.com/nzyjlr/archive/2011/10.html">2011年10月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_37" href="https://www.cnblogs.com/nzyjlr/archive/2011/09.html">2011年9月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_38" href="https://www.cnblogs.com/nzyjlr/archive/2011/04.html">2011年4月 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_39" href="https://www.cnblogs.com/nzyjlr/archive/2011/03.html">2011年3月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_40" href="https://www.cnblogs.com/nzyjlr/archive/2011/02.html">2011年2月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_41" href="https://www.cnblogs.com/nzyjlr/archive/2011/01.html">2011年1月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_42" href="https://www.cnblogs.com/nzyjlr/archive/2010/12.html">2010年12月 (34)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_43" href="https://www.cnblogs.com/nzyjlr/archive/2010/11.html">2010年11月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_44" href="https://www.cnblogs.com/nzyjlr/archive/2010/10.html">2010年10月 (2)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_links277131" class="catList sidebar-block">
+<h3 class="catListTitle">不错的视频</h3>
+
+<ul>
+
+</ul>
+
+</div>
+
+<div id="sidebar_我的可爱的测试同事和上司" class="catList我的可爱的测试同事和上司 sidebar-block">
+<h3 class="catListTitle">测试盟友</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_3_Link_0" href="https://www.cnblogs.com/soloate/p/5756832.html" rel="nofollow">soloate</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_1" href="https://www.cnblogs.com/candle806" rel="nofollow">一米阳光做IT.测试</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_links281921" class="catList sidebar-block">
+<h3 class="catListTitle">测试网站</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_4_Link_0" href="https://www.cnblogs.com/mayingbao/" rel="nofollow">卖烧烤的鱼</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_对写的不错文档的收藏!" class="catList对写的不错文档的收藏! sidebar-block">
+<h3 class="catListTitle">文章收藏夹</h3>
+
+<ul>
+
+</ul>
+
+</div>
+
+<div id="sidebar_links276140" class="catList sidebar-block">
+<h3 class="catListTitle">证券友人</h3>
+
+<ul>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/nzyjlr/p/7754381.html#3895669">1. Re:jmeter-性能监控（InfluxDB+Grafana）</a></li>
+        <li class="recent_comment_body">2018/01/23 11:29:19 INFO - jmeter.threads.JMeterThread: Thread is done: 工作站 1-1 2018/01/23 11:29:19.......</li>
+        <li class="recent_comment_author">--*心向阳*</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/nzyjlr/p/7754381.html#3895666">2. Re:jmeter-性能监控（InfluxDB+Grafana）</a></li>
+        <li class="recent_comment_body"><br><br></li>
+        <li class="recent_comment_author">--*心向阳*</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/nzyjlr/p/7754381.html#3895663">3. Re:jmeter-性能监控（InfluxDB+Grafana）</a></li>
+        <li class="recent_comment_body">你好楼主，配置完后 jmeter数据未保存到influxdb，提示连接超时，看了下端口也没有被占用，端口有开启。</li>
+        <li class="recent_comment_author">--*心向阳*</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/nzyjlr/archive/2010/12/01/1893250.html#3787553">4. Re:测试用例设计--场景法</a></li>
+        <li class="recent_comment_body">赞</li>
+        <li class="recent_comment_author">--故意的是不是</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/nzyjlr/archive/2010/12/01/1893230.html#3743041">5. Re:测试用例设计--因果图</a></li>
+        <li class="recent_comment_body">真是简单易懂的因果图的分析案例。赞</li>
+        <li class="recent_comment_author">--五毛叶</li>
+</ul>
+</div>
+</div>
+</div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 职场人的思考
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>
