@@ -1,0 +1,7 @@
+body{
+    background: black url("images/background.jpg") no-repeat;
+    background-size: 50% 50%;
+}
+li a {
+    color:white;
+}
